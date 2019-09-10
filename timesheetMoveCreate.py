@@ -1,12 +1,12 @@
 import win32com.client as win32
-from win32com.client import Dispatch, constants
 import psutil
 import os
 import subprocess
 import openpyxl
 from pathlib import Path
-from datetime import datetime
-from datetime import date
+from datetime import datetime, date
+import win32api
+
 today = date.today()
 now = datetime.now()
 
@@ -42,19 +42,22 @@ def sendNotification():
     olMailItem = 0x0
     obj = win32.Dispatch("Outlook.Application")
     newMail = obj.CreateItem(olMailItem)
-    newMail.Subject = "Patrick Repaci US Timesheet Week of " + month + '/' + mondayString + '/' + year
+    newMail.Subject = "TimesheetName " + month + '/' + mondayString + '/' + year
     newMail.Body = ''
     newMail.BodyFormat = 2 # olFormatHTML https://msdn.microsoft.com/en-us/library/office/aa219371(v=office.11).aspx
     newMail.HTMLBody = "<HTML><BODY>Hi,<br><br>Enter Your body text here <span style='font-weight: bold; text-decoration: underline'>Bold and Underline</span> More body text.<br><br>Thanks,<br>Your Name</BODY></HTML>" #"<HTML><BODY>Enter \nthe <span style='color:red'>message</span> text here.</BODY></HTML>"
     newMail.To = "to@example.com"
     newMail.CC = "cc@example.com"
-    
-    #attachment1 = r"C:\Users\repacip\Desktop\Python\timesheetMover\Patrick_Repaci_US_Timesheet_08_27_2019.xlsx"
     attachment1 = filename
     print("Attaching", attachment1)
     newMail.Attachments.Add(Source=attachment1)
     print("Attachment Added")
     print("Opening message...")
+    result = win32api.MessageBox(None,"Did you have a day off this week?", "Day off Notification",1)
+    if result == 1:
+        print('Ok')
+    elif result == 2:
+        print('cancel')
     newMail.display(True)
     #newMail.send()
     print("Mail Successfully Sent!")
