@@ -5,7 +5,7 @@ import subprocess
 import openpyxl
 from pathlib import Path
 from datetime import datetime, date
-import win32api
+#import win32api
 
 today = date.today()
 now = datetime.now()
@@ -27,13 +27,54 @@ def fileUpdate():
     wb = openpyxl.load_workbook('C:\\Users\\YourPathHere') #Path to reference file for update
     sheet = wb['Sheet1'] #Selects the sheet
     print("Updating Date")
-    sheet['B9'] = mondayFullDate #Sets the date to Monday (4 days earlier) on cell B9 (Timesheet WeekOf Monday, Sent of Friday)
-    #print(sheet['B9'].value)
-    #print(fileName)
-    print("Saving new file...")
-    wb.save(filename)
-    print("Save Succesful!")
-    sendNotification()
+    sheet['B9'] = mondayFullDate #Sets the date to Monday (4 days earlier) on cell B9
+    dayOff = input("Did you have a day off? If so, what type of day (Enter 0, S, J, BH, or V) or 'n' for none: ")
+    dayOff = dayOff.lower()
+    answers = ['0', 's', 'j', 'bh', 'v']
+    none = ['n', 'none']
+    if dayOff not in answers:
+        print("Please enter a valid response")
+    elif dayOff in none:
+        print("here")
+        #print(sheet['B9'].value)
+        #print(fileName)
+        print("Saving new file...")
+        wb.save(filename)
+        print("Save Succesful!")
+        sendNotification()
+    elif dayOff in answers:
+        print("in dayoff .lower")
+        the_day_off = input("Which day? M, T, W, Th, F: ")
+        if the_day_off.lower() == 'm':
+            sheet['C15'] = dayOff.upper()
+            print("Saving new file...")
+            wb.save(filename)
+            print("Save Succesful!")
+            sendNotification()
+        elif the_day_off.lower() == 't':
+            sheet['C16'] = dayOff.upper()
+            print("Saving new file...")
+            wb.save(filename)
+            print("Save Succesful!")
+            sendNotification()
+        elif the_day_off.lower() == 'w':
+            sheet['C17'] = dayOff.upper()
+            print("Saving new file...")
+            wb.save(filename)
+            print("Save Succesful!")
+            sendNotification()
+        elif the_day_off.lower() == 'th':
+            sheet['C18'] = dayOff.upper()
+            print("Saving new file...")
+            wb.save(filename)
+            print("Save Succesful!")
+            sendNotification()
+        elif the_day_off.lower() == 'f':
+            sheet['C19'] = dayOff.upper()
+            print("Saving new file...")
+            wb.save(filename)
+            print("Save Succesful!")
+            sendNotification()
 
 # Drafting and sending email notification to senders.
 # You can add other senders' email in the list
@@ -42,7 +83,7 @@ def sendNotification():
     olMailItem = 0x0
     obj = win32.Dispatch("Outlook.Application")
     newMail = obj.CreateItem(olMailItem)
-    newMail.Subject = "TimesheetName " + month + '/' + mondayString + '/' + year
+    newMail.Subject = "ENTER MAIL SUBJECT HERE" + month + '/' + mondayString + '/' + year
     newMail.Body = ''
     newMail.BodyFormat = 2 # olFormatHTML https://msdn.microsoft.com/en-us/library/office/aa219371(v=office.11).aspx
     newMail.HTMLBody = "<HTML><BODY>Hi,<br><br>Enter Your body text here <span style='font-weight: bold; text-decoration: underline'>Bold and Underline</span> More body text.<br><br>Thanks,<br>Your Name</BODY></HTML>" #"<HTML><BODY>Enter \nthe <span style='color:red'>message</span> text here.</BODY></HTML>"
@@ -53,11 +94,6 @@ def sendNotification():
     newMail.Attachments.Add(Source=attachment1)
     print("Attachment Added")
     print("Opening message...")
-    result = win32api.MessageBox(None,"Did you have a day off this week?", "Day off Notification",1)
-    if result == 1:
-        print('Ok')
-    elif result == 2:
-        print('cancel')
     newMail.display(True)
     #newMail.send()
     print("Mail Successfully Sent!")
@@ -66,7 +102,7 @@ def sendNotification():
 # Open Outlook.exe. Path may vary according to system config
 # Please check the path to .exe file and update below
   
-def openOutlook():
+'''def openOutlook():
     print("Checking if Microsoft Outlook is open...")
     try:
         subprocess.call(['C:\Program Files\Microsoft Office\Office15\Outlook.exe'])
@@ -90,10 +126,11 @@ else:
     openOutlook()
     sendNotification()
 
-fileUpdate()
+fileUpdate()'''
 
 def main():
-    openOutlook()
+    #openOutlook()
+    sendNotification()
 
 if __name__ == "__main__":
     main()
