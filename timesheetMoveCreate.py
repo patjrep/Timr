@@ -75,6 +75,12 @@ def fileUpdate():
             wb.save(filename)
             print("Save Succesful!")
             sendNotification()
+        else:
+            print("No days off! #Grindreel")
+            print("Saving new file...")
+            wb.save(filename)
+            print("Save Succesful!")
+            sendNotification()
 
 # Drafting and sending email notification to senders.
 # You can add other senders' email in the list
